@@ -1,0 +1,17 @@
+{
+  "note": "Offline seed items so the loop runs without network or API keys. Text fields are short summaries written for this project, not quotes; the live Scout fetches full posts.",
+  "items": [
+    {"lab": "Anthropic", "title": "Introducing Contextual Retrieval", "url": "https://www.anthropic.com/news/contextual-retrieval", "published": "2024-09-19",
+     "text": "Contextual Retrieval prepends chunk-specific explanatory context to each chunk before it is indexed for embeddings and BM25 search. Traditional chunking strips chunks of the context of their source document, which causes retrieval failures. Adding that context reduces the number of failed retrievals."},
+    {"lab": "Anthropic", "title": "Long context prompting tips", "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/long-context-tips", "published": "",
+     "text": "For long document tasks, ask the model to first extract the quotes relevant to the question before carrying out the task. Extracting quotes first helps the model cut through the noise of the rest of the document."},
+    {"lab": "Anthropic", "title": "Building effective agents", "url": "https://www.anthropic.com/engineering/building-effective-agents", "published": "2024-12-19",
+     "text": "Start with the simplest solution and add complexity only when it demonstrably improves outcomes. In the evaluator-optimizer workflow, one model call generates a response while another call evaluates it and provides feedback in a loop. This works well when there are clear evaluation criteria and iterative refinement adds measurable value."},
+    {"lab": "OpenAI", "title": "GPT-4.1 Prompting Guide", "url": "https://cookbook.openai.com/examples/gpt4-1_prompting_guide", "published": "2025-04-14",
+     "text": "For grounded question answering, instruct the model to rely only on the provided context. Tell the model what to do when it lacks the information, for example to say that it does not know rather than guessing."},
+    {"lab": "Anthropic", "title": "Effective context engineering for AI agents", "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents", "published": "2025-09-29",
+     "text": "Context is a finite resource with diminishing returns. Good context engineering means finding the smallest set of high-signal tokens that maximize the likelihood of the desired outcome, rather than filling the context window."},
+    {"lab": "Anthropic", "title": "Use examples (multishot prompting)", "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/multishot-prompting", "published": "",
+     "text": "Including a few well-crafted examples in the prompt, known as few-shot or multishot prompting, improves accuracy and consistency of the output format."}
+  ]
+}

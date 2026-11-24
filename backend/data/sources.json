@@ -1,0 +1,13 @@
+{
+  "sources": [
+    {"id": "anthropic-engineering", "lab": "Anthropic", "type": "html", "url": "https://www.anthropic.com/engineering", "link_pattern": "^/(engineering|research)/[a-z0-9-]+$", "base": "https://www.anthropic.com"},
+    {"id": "anthropic-news", "lab": "Anthropic", "type": "html", "url": "https://www.anthropic.com/news", "link_pattern": "^/news/[a-z0-9-]+$", "base": "https://www.anthropic.com"},
+    {"id": "openai-news", "lab": "OpenAI", "type": "rss", "url": "https://openai.com/news/rss.xml"},
+    {"id": "deepmind-blog", "lab": "Google DeepMind", "type": "rss", "url": "https://deepmind.google/blog/rss.xml"},
+    {"id": "google-research", "lab": "Google Research", "type": "rss", "url": "https://research.google/blog/rss/"},
+    {"id": "huggingface-blog", "lab": "Hugging Face", "type": "rss", "url": "https://huggingface.co/blog/feed.xml"},
+    {"id": "cursor-blog", "lab": "Cursor", "type": "html", "url": "https://cursor.com/blog", "link_pattern": "^/blog/[a-z0-9-]+$", "base": "https://cursor.com"},
+    {"id": "cognition-blog", "lab": "Cognition", "type": "html", "url": "https://cognition.ai/blog", "link_pattern": "^/blog/[a-z0-9-]+$", "base": "https://cognition.ai"},
+    {"id": "sierra-blog", "lab": "Sierra", "type": "html", "url": "https://sierra.ai/blog", "link_pattern": "^/blog/[a-z0-9-]+$", "base": "https://sierra.ai"}
+  ]
+}

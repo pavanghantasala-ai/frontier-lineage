@@ -1,0 +1,54 @@
+:root { --ink:#111418; --muted:#5b6470; --line:#e3e6ea; --bg:#f7f8fa; --card:#fff; --accent:#3b5bdb;
+  --green:#2b8a3e; --amber:#b7791f; --red:#c92a2a; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.shell { max-width: 1180px; margin: 0 auto; padding: 0 20px 60px; }
+header.top { display:flex; align-items:center; gap:28px; padding:18px 0; border-bottom:1px solid var(--line); margin-bottom:22px; flex-wrap: wrap; }
+.brand { font-weight:700; font-size:18px; letter-spacing:-0.01em; }
+.brand small { display:block; font-weight:400; color:var(--muted); font-size:12px; }
+nav a { margin-right:18px; color:var(--muted); font-size:14px; }
+nav a.active { color:var(--ink); font-weight:600; }
+.status-pill { margin-left:auto; font-size:12px; color:var(--muted); display:flex; gap:14px; }
+.banner { background:#fff8e6; border:1px solid #f1d38a; color:#7a5a00; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:18px; }
+.error { background:#fff0f0; border:1px solid #f3b4b4; color:var(--red); padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; }
+h1 { font-size:24px; margin:0 0 4px; letter-spacing:-0.01em; }
+h2 { font-size:16px; margin:28px 0 10px; }
+.sub { color:var(--muted); margin:0 0 18px; font-size:14px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:12px; }
+.row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.grow { flex:1; }
+.badge { display:inline-block; font-size:11px; font-weight:600; padding:3px 8px; border-radius:999px; background:#eef0f3; color:var(--muted); white-space:nowrap; }
+.badge.Replicated, .badge.reference, .badge.promoted { background:#e6f4ea; color:var(--green); }
+.badge.Partial { background:#fff4db; color:var(--amber); }
+.badge.Didnt { background:#fdecec; color:var(--red); }
+.badge.candidate { background:#e7ecff; color:var(--accent); }
+.muted { color:var(--muted); }
+.small { font-size:12px; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+th { color:var(--muted); font-weight:600; font-size:12px; }
+td.num, th.num { text-align:right; font-variant-numeric: tabular-nums; }
+.pos { color:var(--green); } .neg { color:var(--red); }
+button { font: inherit; font-size:13px; border:1px solid var(--line); background:#fff; padding:6px 12px; border-radius:7px; cursor:pointer; }
+button:hover { border-color:#c5cad1; }
+button.primary { background:var(--ink); color:#fff; border-color:var(--ink); }
+button.danger { color:var(--red); }
+button:disabled { opacity:.5; cursor:default; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px; }
+pre { background:#f2f4f7; padding:10px 12px; border-radius:8px; overflow:auto; white-space:pre-wrap; }
+.kv { display:grid; grid-template-columns: 160px 1fr; gap:6px 14px; font-size:14px; }
+.kv dt { color:var(--muted); }
+.kv dd { margin:0; }
+.grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+.stats { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+.stat { background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 14px; min-width:130px; }
+.stat b { display:block; font-size:20px; }
+.stat span { font-size:12px; color:var(--muted); }
+.log { max-height:220px; overflow:auto; background:#0f1115; color:#cfd6df; padding:10px 12px; border-radius:8px; font-size:12px; }
+input[type=text], input[type=number] { font:inherit; font-size:13px; padding:6px 8px; border:1px solid var(--line); border-radius:7px; }
+label { font-size:13px; }
+.tree-indent { display:inline-block; color:#b0b6bf; font-family: ui-monospace, monospace; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } .kv { grid-template-columns: 1fr; } .status-pill { margin-left:0; } }
+.intro { font-size:14px; line-height:1.5; }

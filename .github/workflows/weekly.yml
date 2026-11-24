@@ -1,0 +1,50 @@
+name: Weekly cycle
+on:
+  schedule:
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: weekly-cycle
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.10" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: pip install -r requirements.txt && (cd web && npm ci)
+      - name: Start Ollama with Qwen 2.5
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          (ollama serve > /tmp/ollama.log 2>&1 &) ; sleep 5
+          ollama pull qwen2.5:1.5b
+      - name: Run the cycle
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: cd backend && python -u -m lineage.cli cycle --models gpt,qwen-local --runs 2 --max-cards 4 --live
+      - name: Save lab state
+        if: ${{ !cancelled() }}
+        run: |
+          git config user.name "frontier-lineage-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f backend/state/lineage.db
+          git commit -m "Weekly cycle $(date -u +%F)" || echo "no changes"
+          git pull --rebase -X theirs && git push
+      - uses: actions/checkout@v4
+        with:
+          repository: pavanghantasala-ai/pavan-site
+          token: ${{ secrets.SITE_TOKEN }}
+          path: site
+      - name: Publish to pavanghantasala.com/lineage
+        run: |
+          scripts/build_public.sh site/lineage
+          cd site
+          git config user.name "frontier-lineage-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lineage
+          git commit -m "Frontier Lineage: weekly update $(date -u +%F)" || echo "no changes"
+          git push
