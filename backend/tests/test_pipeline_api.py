@@ -94,3 +94,10 @@ def test_fetcher_refuses_private_addresses():
     from lineage import scout
     with pytest.raises(ValueError):
         scout.ingest_url("http://127.0.0.1:9/admin")
+
+
+def test_seed_cards_do_not_claim_verbatim_fidelity():
+    from lineage import db
+    _cycle()
+    cards = [c["data"] for c in db.q("SELECT data FROM cards")]
+    assert cards and all(c["fidelity"] is None for c in cards)

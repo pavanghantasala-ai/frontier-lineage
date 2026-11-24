@@ -41,8 +41,13 @@ export default function ClaimDetail() {
             <dt>Cost</dt><dd>may rise at most {(d.max_cost_increase * 100).toFixed(0)}%</dd>
             <dt>Replicated if</dt><dd>it passes on at least 2 models</dd>
           </dl>
-          <b style={{ display: 'block', marginTop: 14 }}>Source fidelity {(d.fidelity * 100).toFixed(0)}%</b>
-          <p className="small muted">Share of supporting quotes found verbatim in the post.</p>
+          {d.fidelity == null ? <>
+            <b style={{ display: 'block', marginTop: 14 }}>Supporting passages (paraphrased)</b>
+            <p className="small muted">Extracted from a summary of the post, not the full text, so these are paraphrases. Read the source for the exact wording.</p>
+          </> : <>
+            <b style={{ display: 'block', marginTop: 14 }}>Source fidelity {(d.fidelity * 100).toFixed(0)}%</b>
+            <p className="small muted">Share of supporting quotes found verbatim in the post.</p>
+          </>}
           {(d.source_quotes ?? []).map((q: string, i: number) => <blockquote key={i} className="small" style={{ margin: '6px 0', paddingLeft: 10, borderLeft: '3px solid var(--line)' }}>{q}</blockquote>)}
         </div>
       </div>

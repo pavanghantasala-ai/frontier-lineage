@@ -49,7 +49,7 @@ export default function VerdictCard({ v, onDecide }: { v: VerdictView; onDecide?
       <p style={{ margin: '8px 0' }}>{v.claim}</p>
       <div className="small muted" style={{ marginBottom: 8 }}>
         Change tested: <code>{Object.entries(v.config_patch).map(([k, val]) => `${k} = ${JSON.stringify(val)}`).join(', ')}</code>
-        {' · '}Source fidelity {(v.fidelity * 100).toFixed(0)}%
+        {v.fidelity != null && ` · Source fidelity ${(v.fidelity * 100).toFixed(0)}%`}
         {v.summary.model_specific && ' · Model-specific: helps some models, hurts others'}
       </div>
       <ModelTable models={v.models} />

@@ -19,7 +19,7 @@ export type VerdictView = {
   url: string
   claim: string
   config_patch: Record<string, unknown>
-  fidelity: number
+  fidelity: number | null
   models: Record<string, ModelResult>
   summary: { passed: string[]; positive: string[]; negative: string[]; model_specific: boolean; required_models: number }
   version_id: number

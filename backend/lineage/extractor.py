@@ -76,7 +76,7 @@ def extract_llm(item, model):
 
 
 def fidelity(card, text):
-    """Share of the card's source quotes that appear verbatim in the post."""
+    """Share of the card's source quotes that appear verbatim in the post. Seed summaries are paraphrases, so cards built from them get None."""
     quotes = card.get("source_quotes") or []
     if not quotes:
         return 0.0
@@ -120,7 +120,7 @@ def extract_item(item, log=print):
         card["untestable_reason"] = card.get("untestable_reason") or "Needs code or tool changes beyond the config surface."
     for k, v in DEFAULT_TEST.items():
         card.setdefault(k, v)
-    card.update({"lab": item["lab"], "url": item["url"], "published": item["published"], "fidelity": fidelity(card, item["text"]),
+    card.update({"lab": item["lab"], "url": item["url"], "published": item["published"], "fidelity": None if item["source"] == "seed" else fidelity(card, item["text"]),
                  "extract_cost_usd": cost})
     status = "ready" if card.get("testable") and patch else "untestable"
     card_id = db.insert("cards", item_id=item["id"], data=card, status=status, created_at=db.now())
