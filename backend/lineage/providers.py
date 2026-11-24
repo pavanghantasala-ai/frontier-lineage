@@ -44,6 +44,11 @@ class Model:
     def is_mock(self):
         return self.provider == "mock"
 
+    @property
+    def fingerprint(self):
+        """Identity of the deployment answering, so cached scores never cross endpoints."""
+        return f"{self.provider}:{self.model}:{getattr(self, 'base_url', '')}"
+
     def cost(self, tin, tout):
         return (tin * self.price_in + tout * self.price_out) / 1_000_000
 

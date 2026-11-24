@@ -2,7 +2,7 @@
 import threading
 
 from . import db, extractor, lineage_store, scout
-from .adversary import test_card
+from .adversary import over_budget, test_card
 from .providers import default_eval_models, get_models, healthy
 
 STATUS = {"running": False, "log": [], "error": None}
@@ -39,6 +39,9 @@ def run_cycle(models=None, runs=2, max_cards=3, live=False, seeds=True, max_extr
         tested = 0
         for card in ready:
             if tested >= max_cards:
+                break
+            if over_budget(lineage_store.reference(), ms, runs):
+                _log("adversary: weekly budget reached; remaining cards stay queued for next week")
                 break
             cand = lineage_store.replicate(card["id"])
             if cand is None:

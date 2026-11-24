@@ -69,11 +69,12 @@ def run_suite(config, model, runs=2, tasks=None, workers=8):
 
 def eval_version(version, model, runs=2, force=False):
     if not force:
-        cached = db.one("SELECT * FROM evals WHERE version_id=? AND model_id=? AND runs=? ORDER BY id DESC",
-                        (version["id"], model.id, runs))
-        if cached:
-            return cached
+        for cached in db.q("SELECT * FROM evals WHERE version_id=? AND model_id=? AND runs=? ORDER BY id DESC",
+                           (version["id"], model.id, runs)):
+            if cached["metrics"].get("fingerprint", model.fingerprint) == model.fingerprint:
+                return cached
     metrics, per_task, samples, cost = run_suite(version["config"], model, runs)
+    metrics["fingerprint"] = model.fingerprint
     eid = db.insert("evals", version_id=version["id"], model_id=model.id, runs=runs, metrics=metrics, per_task=per_task,
                     samples=samples, cost_usd=cost, created_at=db.now())
     return db.one("SELECT * FROM evals WHERE id=?", (eid,))

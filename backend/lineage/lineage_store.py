@@ -4,8 +4,8 @@ from .config import DEFAULT_CONFIG, apply_patch, config_diff
 
 
 def reference():
-    v = db.one("SELECT * FROM versions WHERE status='reference'")
-    if v is None:
+    v = db.one("SELECT * FROM versions WHERE status='reference' ORDER BY promoted_at DESC, id DESC")
+    if v is None and db.one("SELECT id FROM versions") is None:
         vid = db.insert("versions", parent_id=None, card_id=None, label="v0", config=DEFAULT_CONFIG, diff=[],
                         status="reference", created_at=db.now(), promoted_at=db.now())
         db.log("version", vid, "created v0 baseline reference")

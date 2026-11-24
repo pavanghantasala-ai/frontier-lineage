@@ -8,8 +8,8 @@ def decide(verdict_id, action, note=""):
         raise ValueError("verdict not found")
     if action == "promote":
         old = lineage_store.reference()
-        db.update("versions", old["id"], status="retired")
         db.update("versions", v["version_id"], status="reference", promoted_at=db.now())
+        db.update("versions", old["id"], status="retired")
         db.update("verdicts", verdict_id, published=1, decision="promoted", decided_at=db.now())
     elif action == "publish":
         db.update("versions", v["version_id"], status="archived")
@@ -27,6 +27,6 @@ def rollback(version_id, note=""):
     if target is None or not target["promoted_at"]:
         raise ValueError("can only roll back to a version that was the reference before")
     old = lineage_store.reference()
-    db.update("versions", old["id"], status="retired")
     db.update("versions", version_id, status="reference", promoted_at=db.now())
+    db.update("versions", old["id"], status="retired")
     db.log("rollback", version_id, f"reference {old['label']} -> {target['label']}. {note}".strip())

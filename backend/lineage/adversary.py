@@ -14,17 +14,24 @@ def iso_week(ts=None):
 
 def spend_this_week():
     week = iso_week()
-    return sum(e["cost_usd"] or 0 for e in db.q("SELECT cost_usd, created_at FROM evals") if iso_week(e["created_at"]) == week)
+    rows = db.q("SELECT cost_usd, created_at FROM evals WHERE model_id NOT LIKE 'mock-%'")
+    return sum(e["cost_usd"] or 0 for e in rows if iso_week(e["created_at"]) == week)
 
 
 def estimate_cost(parent, models, runs):
     est = 0.0
     for m in models:
+        if m.is_mock:
+            continue
         cached = db.one("SELECT metrics FROM evals WHERE version_id=? AND model_id=? ORDER BY id DESC", (parent["id"], m.id))
         per_task = cached["metrics"]["cost_per_task"] if cached else 0.003
         n = len(evals.load_tasks()) * runs
         est += per_task * n * (2.5 if not cached else 1.5)
     return est
+
+
+def over_budget(parent, models, runs):
+    return spend_this_week() + estimate_cost(parent, models, runs) > WEEKLY_BUDGET_USD
 
 
 def judge(card, comparisons):
@@ -41,7 +48,7 @@ def judge(card, comparisons):
                 passed.append(mid)
         if c["accuracy"]["delta"] < 0:
             negative.append(mid)
-    need = min(2, len(comparisons))
+    need = 2
     if len(passed) >= need:
         verdict = "Replicated"
     elif positive:
@@ -56,9 +63,8 @@ def test_card(card_row, candidate, models, runs, log=print):
     card = card_row["data"]
     parent = lineage_store.get(candidate["parent_id"])
     est = estimate_cost(parent, models, runs)
-    if spend_this_week() + est > WEEKLY_BUDGET_USD:
+    if over_budget(parent, models, runs):
         log(f"adversary: skipping card {card_row['id']}, estimated ${est:.2f} would exceed the weekly budget")
-        db.update("cards", card_row["id"], status="budget_skipped")
         return None
     comparisons = {}
     for m in models:

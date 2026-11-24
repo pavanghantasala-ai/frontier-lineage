@@ -73,3 +73,24 @@ def test_public_export_is_read_only_snapshot(tmp_path):
     assert "SECRET OPERATOR NOTE" not in (out / "ledger.json").read_text()
     for name in ("diff", "scoreboard", "versions", "ledger"):
         assert (out / f"{name}.json").exists()
+
+
+def test_undecided_verdicts_stay_in_review_queue():
+    from lineage import db, frontier_diff
+    _cycle()
+    db.conn().execute("UPDATE verdicts SET created_at = '2020-01-06T00:00:00+00:00'"); db.conn().commit()
+    d = frontier_diff.build()
+    assert d["pending"] and not d["didnt_hold"] + d["partial"] + d["replicated"]
+
+
+def test_mock_runs_are_not_billable():
+    from lineage.adversary import spend_this_week
+    _cycle()
+    assert spend_this_week() == 0
+
+
+def test_fetcher_refuses_private_addresses():
+    import pytest
+    from lineage import scout
+    with pytest.raises(ValueError):
+        scout.ingest_url("http://127.0.0.1:9/admin")

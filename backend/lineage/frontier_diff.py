@@ -23,7 +23,8 @@ def build(week=None):
     items = [i for i in db.q("SELECT id, lab, title, url, status, fetched_at FROM items ORDER BY id DESC") if iso_week(i["fetched_at"]) == week]
     cards = {c["id"]: c["data"] for c in db.q("SELECT id, data FROM cards")}
     verdicts = [_card_view(v, cards) for v in db.q("SELECT * FROM verdicts ORDER BY id DESC") if iso_week(v["created_at"]) == week]
-    ref = db.one("SELECT label FROM versions WHERE status='reference'")
+    undecided = [_card_view(v, cards) for v in db.q("SELECT * FROM verdicts WHERE decision IS NULL ORDER BY id DESC")]
+    ref = db.one("SELECT label FROM versions WHERE status='reference' ORDER BY promoted_at DESC, id DESC")
     mock = any(m["mock"] for v in verdicts for m in v["models"].values())
     return {
         "week": week,
@@ -33,8 +34,8 @@ def build(week=None):
         "replicated": [v for v in verdicts if v["verdict"] == "Replicated"],
         "partial": [v for v in verdicts if v["verdict"] == "Partial"],
         "didnt_hold": [v for v in verdicts if v["verdict"] == "Didn't hold"],
-        "proposed_promotions": [v for v in verdicts if v["verdict"] == "Replicated" and not v["decision"]],
-        "pending": [v for v in verdicts if not v["decision"]],
+        "proposed_promotions": [v for v in undecided if v["verdict"] == "Replicated"],
+        "pending": undecided,
         "spend_usd": spend_this_week(),
         "budget_usd": WEEKLY_BUDGET_USD,
     }

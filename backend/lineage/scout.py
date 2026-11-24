@@ -1,6 +1,8 @@
 """Scout: watches lab blogs and feeds and stores new, deduplicated items."""
+import ipaddress
 import json
 import re
+import socket
 from urllib.parse import urljoin
 
 import feedparser
@@ -17,8 +19,19 @@ def load_sources():
     return json.loads(SOURCES.read_text())["sources"]
 
 
+def _public_only(request):
+    """Refuse to fetch loopback, private, link-local or reserved addresses, including on redirects."""
+    if request.url.scheme not in ("http", "https"):
+        raise ValueError(f"refusing to fetch {request.url.scheme} URL")
+    for *_, addr in socket.getaddrinfo(request.url.host, request.url.port or 443):
+        ip = ipaddress.ip_address(addr[0])
+        if not ip.is_global:
+            raise ValueError(f"refusing to fetch non-public address {ip}")
+
+
 def _get(url):
-    r = httpx.get(url, headers=UA, timeout=20, follow_redirects=True)
+    with httpx.Client(headers=UA, timeout=20, follow_redirects=True, event_hooks={"request": [_public_only]}) as c:
+        r = c.get(url)
     r.raise_for_status()
     return r.text
 
