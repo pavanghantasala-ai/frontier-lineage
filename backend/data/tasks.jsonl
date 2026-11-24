@@ -1,0 +1,41 @@
+{"id": "t01", "type": "policy_qa", "question": "What is the domestic meal per diem?", "facts": [["75"]], "sources": ["travel-expense-policy"]}
+{"id": "t02", "type": "policy_qa", "question": "What is the nightly hotel cap in San Francisco?", "facts": [["325"]], "sources": ["travel-expense-policy"]}
+{"id": "t03", "type": "policy_qa", "question": "When can an employee book premium economy on a flight?", "facts": [["6 hours", "six hours"]], "sources": ["travel-expense-policy"]}
+{"id": "t04", "type": "policy_qa", "question": "How many days do I have to submit my expense report after a trip?", "facts": [["30 days"]], "sources": ["travel-expense-policy"]}
+{"id": "t05", "type": "policy_qa", "question": "Above what amount are itemized receipts required?", "facts": [["25"]], "sources": ["travel-expense-policy"]}
+{"id": "t06", "type": "policy_qa", "question": "How many days a week can I work from home?", "facts": [["2 days", "two days"]], "sources": ["remote-work-policy"]}
+{"id": "t07", "type": "policy_qa", "question": "What are the core collaboration hours?", "facts": [["10:00 am", "10 am"], ["3:00 pm", "3 pm"]], "sources": ["remote-work-policy"]}
+{"id": "t08", "type": "policy_qa", "question": "How much is the home office stipend for remote workers?", "facts": [["500"]], "sources": ["remote-work-policy"]}
+{"id": "t09", "type": "policy_qa", "question": "How many vacation days does someone with 4 years at the bank get?", "facts": [["20 days"]], "sources": ["pto-policy"]}
+{"id": "t10", "type": "policy_qa", "question": "When do carried-over PTO days expire?", "facts": [["march 31"]], "sources": ["pto-policy"]}
+{"id": "t11", "type": "policy_qa", "question": "How long is paid leave for a primary caregiver after a baby is born?", "facts": [["16 weeks"]], "sources": ["pto-policy"]}
+{"id": "t12", "type": "policy_qa", "question": "What is the minimum password length?", "facts": [["14 characters"]], "sources": ["information-security-policy"]}
+{"id": "t13", "type": "policy_qa", "question": "How quickly do I have to report a phishing email?", "facts": [["1 hour", "one hour"]], "sources": ["information-security-policy"]}
+{"id": "t14", "type": "policy_qa", "question": "Which extension do I call if my laptop is stolen?", "facts": [["4357"]], "sources": ["information-security-policy"]}
+{"id": "t15", "type": "policy_qa", "question": "What is the cutoff time for a same-day international wire?", "facts": [["2:00 pm", "2 pm"]], "sources": ["wire-transfer-procedures"]}
+{"id": "t16", "type": "policy_qa", "question": "How much does an outgoing domestic wire cost?", "facts": [["25"]], "sources": ["wire-transfer-procedures"]}
+{"id": "t17", "type": "policy_qa", "question": "Above what amount does a wire to a new beneficiary need callback verification?", "facts": [["10000"]], "sources": ["wire-transfer-procedures"]}
+{"id": "t18", "type": "policy_qa", "question": "How long does a customer have to dispute a card charge?", "facts": [["60 days"]], "sources": ["card-disputes"]}
+{"id": "t19", "type": "policy_qa", "question": "How soon is provisional credit issued after a dispute is filed?", "facts": [["10 business days"]], "sources": ["card-disputes"]}
+{"id": "t20", "type": "policy_qa", "question": "How can a customer avoid the Everyday Checking monthly fee?", "facts": [["1500"], ["500"]], "sources": ["account-types"]}
+{"id": "t21", "type": "policy_qa", "question": "How much does each extra withdrawal from High-Yield Savings cost?", "facts": [["5"]], "sources": ["account-types"]}
+{"id": "t22", "type": "policy_qa", "question": "What is the maximum number of overdraft fees charged in a day?", "facts": [["3", "three"]], "sources": ["account-types"]}
+{"id": "t23", "type": "policy_qa", "question": "How many quotes do I need for a $10,000 purchase?", "facts": [["three", "3"]], "sources": ["procurement-policy"]}
+{"id": "t24", "type": "policy_qa", "question": "How long does the vendor security review take?", "facts": [["15 business days"]], "sources": ["procurement-policy"]}
+{"id": "t25", "type": "policy_qa", "question": "How often are laptops replaced?", "facts": [["4 years", "four years"]], "sources": ["it-equipment"]}
+{"id": "t26", "type": "policy_qa", "question": "What is the limit on gifts I can accept from one vendor in a year?", "facts": [["100"]], "sources": ["gifts-and-entertainment"]}
+{"id": "t27", "type": "policy_qa", "question": "How many days do I have to log a gift in GiftLog?", "facts": [["5 business days"]], "sources": ["gifts-and-entertainment"]}
+{"id": "m01", "type": "multi_hop", "question": "For a trip to New York City, what is the hotel cap, and what is the international meal per diem?", "facts": [["325"], ["110"]], "sources": ["travel-expense-policy"]}
+{"id": "m02", "type": "multi_hop", "question": "A Premier Checking customer lost their card and wants it in 2 days. How fast does expedited replacement arrive and what does it cost them?", "facts": [["2 business days"], ["waived", "free", "no charge", "$0"]], "sources": ["card-disputes"]}
+{"id": "m03", "type": "multi_hop", "question": "What are the outgoing international wire fee and the international wire cutoff time?", "facts": [["45"], ["2:00 pm", "2 pm"]], "sources": ["wire-transfer-procedures"]}
+{"id": "m04", "type": "multi_hop", "question": "I want to buy software from a new vendor for $30,000 that will handle customer data. What approval and review do I need?", "facts": [["procurement committee", "rfp"], ["security review"]], "sources": ["procurement-policy", "information-security-policy"]}
+{"id": "m05", "type": "multi_hop", "question": "How many PTO days and how many sick days does an employee with 7 years of service get?", "facts": [["25 days"], ["8 sick days", "8 days"]], "sources": ["pto-policy"]}
+{"id": "m06", "type": "multi_hop", "question": "Can I work remotely from Portugal for three weeks, and who has to approve it?", "facts": [["14 days"], ["hr"]], "sources": ["remote-work-policy"]}
+{"id": "m07", "type": "multi_hop", "question": "What is the daily online wire limit for a business account, and what extra check applies to a $20,000 wire to a new payee?", "facts": [["250000"], ["callback"]], "sources": ["wire-transfer-procedures"]}
+{"id": "m08", "type": "multi_hop", "question": "How long can a dispute on an international transaction take to investigate, and how long does the customer have to file it?", "facts": [["90 days"], ["60 days"]], "sources": ["card-disputes"]}
+{"id": "r01", "type": "refusal", "question": "What is the mortgage rate for a 30-year fixed loan?", "facts": [], "sources": [], "expect_abstain": true}
+{"id": "r02", "type": "refusal", "question": "How much is the annual bonus for analysts?", "facts": [], "sources": [], "expect_abstain": true}
+{"id": "r03", "type": "refusal", "question": "What is the dress code for the headquarters office?", "facts": [], "sources": [], "expect_abstain": true}
+{"id": "r04", "type": "refusal", "question": "Does Meridian offer cryptocurrency trading accounts?", "facts": [], "sources": [], "expect_abstain": true}
+{"id": "r05", "type": "refusal", "question": "What is the 401k employer match percentage?", "facts": [], "sources": [], "expect_abstain": true}
+{"id": "r06", "type": "refusal", "question": "Who is the CEO of Meridian Federal Bank?", "facts": [], "sources": [], "expect_abstain": true}

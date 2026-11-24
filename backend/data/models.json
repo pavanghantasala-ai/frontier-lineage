@@ -1,0 +1,13 @@
+{
+  "pricing_note": "USD per 1M tokens. Check current provider pricing before trusting cost numbers.",
+  "models": [
+    {"id": "claude", "provider": "anthropic", "model": "claude-sonnet-4-5", "env": "ANTHROPIC_API_KEY", "price_in": 3.0, "price_out": 15.0},
+    {"id": "gpt", "provider": "openai", "model": "gpt-4.1-mini", "env": "OPENAI_API_KEY", "price_in": 0.4, "price_out": 1.6},
+    {"id": "qwen-local", "provider": "openai_compat", "model": "qwen2.5:1.5b", "base_url": "http://localhost:11434/v1", "base_url_env": "OLLAMA_BASE_URL", "price_in": 0.0, "price_out": 0.0, "open_weights": true, "timeout": 600},
+    {"id": "llama-groq", "provider": "openai_compat", "model": "llama-3.3-70b-versatile", "base_url": "https://api.groq.com/openai/v1", "env": "GROQ_API_KEY", "price_in": 0.59, "price_out": 0.79, "open_weights": true},
+    {"id": "gemini", "provider": "gemini", "model": "gemini-2.5-flash", "env": "GEMINI_API_KEY", "price_in": 0.3, "price_out": 2.5},
+    {"id": "mock-strong", "provider": "mock", "model": "mock-strong", "error_rate": 0.04, "price_in": 3.0, "price_out": 15.0},
+    {"id": "mock-mid", "provider": "mock", "model": "mock-mid", "error_rate": 0.10, "price_in": 0.4, "price_out": 1.6},
+    {"id": "mock-weak", "provider": "mock", "model": "mock-weak", "error_rate": 0.18, "price_in": 0.3, "price_out": 2.5}
+  ]
+}
