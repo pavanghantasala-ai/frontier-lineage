@@ -1,4 +1,7 @@
-from fastapi import FastAPI, HTTPException
+import hmac
+import os
+
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -11,6 +14,18 @@ from .paths import WEB_DIST
 from .providers import available_models, default_eval_models, load_specs
 
 app = FastAPI(title="Frontier Lineage")
+
+LOCAL_HOSTS = {"127.0.0.1", "::1", "localhost"}
+
+
+def operator(request: Request):
+    """Write actions spend API credit or change the reference agent: require LINEAGE_ADMIN_TOKEN, or localhost if unset."""
+    token = os.environ.get("LINEAGE_ADMIN_TOKEN")
+    if token:
+        if not hmac.compare_digest(request.headers.get("x-admin-token", ""), token):
+            raise HTTPException(401, "operator token required")
+    elif not request.client or request.client.host not in LOCAL_HOSTS:
+        raise HTTPException(403, "set LINEAGE_ADMIN_TOKEN to allow write actions from other hosts")
 
 
 class CycleReq(BaseModel):
@@ -56,7 +71,7 @@ def status():
     }
 
 
-@app.post("/api/cycle")
+@app.post("/api/cycle", dependencies=[Depends(operator)])
 def start_cycle(req: CycleReq):
     if pipeline.STATUS["running"]:
         raise HTTPException(409, "a cycle is already running")
@@ -79,7 +94,7 @@ def items():
                    ORDER BY i.id DESC""")
 
 
-@app.post("/api/ingest")
+@app.post("/api/ingest", dependencies=[Depends(operator)])
 def ingest(req: IngestReq):
     try:
         return {"item_id": scout.ingest_url(req.url, req.lab)}
@@ -137,7 +152,7 @@ def diff_md(week: str | None = None):
     return frontier_diff.markdown(week)
 
 
-@app.post("/api/verdicts/{verdict_id}/decision")
+@app.post("/api/verdicts/{verdict_id}/decision", dependencies=[Depends(operator)])
 def decision(verdict_id: int, req: DecisionReq):
     try:
         decisions.decide(verdict_id, req.action, req.note)
@@ -146,7 +161,7 @@ def decision(verdict_id: int, req: DecisionReq):
     return {"ok": True}
 
 
-@app.post("/api/rollback")
+@app.post("/api/rollback", dependencies=[Depends(operator)])
 def rollback(req: RollbackReq):
     try:
         decisions.rollback(req.version_id, req.note)
@@ -170,5 +185,6 @@ if WEB_DIST.exists():
 
     @app.get("/{path:path}")
     def spa(path: str):
-        f = WEB_DIST / path
-        return FileResponse(f if path and f.is_file() else WEB_DIST / "index.html")
+        root = WEB_DIST.resolve()
+        f = (root / path).resolve()
+        return FileResponse(f if path and f.is_relative_to(root) and f.is_file() else root / "index.html")

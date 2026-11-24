@@ -31,8 +31,18 @@ def export(out):
         _write(out, f"cards/{c['id']}", card)
     _write(out, "versions", api.versions())
     _write(out, "items", api.items())
-    _write(out, "ledger", api.ledger())
+    _write(out, "ledger", [_public_entry(e) for e in api.ledger()])
     return out
+
+
+def _public_entry(e):
+    """Operator notes on decisions and rollbacks stay private; only the action is published."""
+    e = dict(e)
+    if e["kind"] == "decision":
+        e["note"] = e["note"].split(":")[0]
+    elif e["kind"] == "rollback":
+        e["note"] = e["note"].split(". ")[0]
+    return e
 
 
 def _tested_models():

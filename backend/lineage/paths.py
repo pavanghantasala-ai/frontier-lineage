@@ -8,5 +8,5 @@ TASKS = DATA / "tasks.jsonl"
 MODELS = DATA / "models.json"
 SOURCES = DATA / "sources.json"
 SEEDS = DATA / "seed_items.json"
-DB_PATH = Path(os.environ.get("LINEAGE_DB", ROOT / "lineage.db"))
+DB_PATH = Path(os.environ.get("LINEAGE_DB", ROOT / "state" / "lineage.db"))
 WEB_DIST = ROOT.parent / "web" / "dist"

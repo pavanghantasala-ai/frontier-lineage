@@ -98,7 +98,10 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
     if (init?.method && init.method !== 'GET') throw new Error('This is a read-only view.')
     path = `${import.meta.env.BASE_URL}data/${path.replace(/^\/api\//, '')}.json`
   }
-  const r = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...init })
+  const token = localStorage.getItem('lineage_admin_token')
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (token) headers['X-Admin-Token'] = token
+  const r = await fetch(path, { headers, ...init })
   if (!r.ok) {
     let msg = r.statusText
     try {

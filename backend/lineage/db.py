@@ -2,6 +2,7 @@ import json
 import sqlite3
 import threading
 from datetime import datetime, timezone
+from pathlib import Path
 
 from .paths import DB_PATH
 
@@ -41,6 +42,7 @@ def now():
 def conn():
     global _conn
     if _conn is None:
+        Path(DB_PATH).parent.mkdir(parents=True, exist_ok=True)
         _conn = sqlite3.connect(DB_PATH, check_same_thread=False)
         _conn.row_factory = sqlite3.Row
         _conn.executescript(SCHEMA)
