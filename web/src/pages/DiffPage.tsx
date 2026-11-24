@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { api, type Diff } from '../api'
+import { api, STATIC, type Diff } from '../api'
 import VerdictCard from './VerdictCard'
 
 export default function DiffPage() {
@@ -32,9 +32,9 @@ export default function DiffPage() {
       <div className="row" style={{ marginTop: 18 }}>
         <div className="grow">
           <h1>Frontier Diff · {d.week}</h1>
-          <p className="sub">Your weekly gate. Agents scouted, implemented and tested; you publish verdicts and promote versions.</p>
+          <p className="sub">{STATIC ? 'This week: agents scouted, implemented and tested these claims. A human decides what ships.' : 'Your weekly gate. Agents scouted, implemented and tested; you publish verdicts and promote versions.'}</p>
         </div>
-        <button onClick={copy}>{copied ? 'Copied' : 'Copy as Markdown'}</button>
+        {!STATIC && <button onClick={copy}>{copied ? 'Copied' : 'Copy as Markdown'}</button>}
       </div>
       {err && <div className="error">{err}</div>}
       <div className="stats">
@@ -45,9 +45,9 @@ export default function DiffPage() {
         <div className="stat"><b>{d.reference}</b><span>reference agent</span></div>
       </div>
 
-      <h2>Waiting for your decision ({d.pending.length})</h2>
+      <h2>{STATIC ? 'Awaiting review' : 'Waiting for your decision'} ({d.pending.length})</h2>
       {d.pending.length === 0 && <p className="muted small">Nothing pending. Run a cycle to test new claims.</p>}
-      {d.pending.map((v) => <VerdictCard key={v.verdict_id} v={v} onDecide={(a) => decide(v.verdict_id, a)} />)}
+      {d.pending.map((v) => <VerdictCard key={v.verdict_id} v={v} onDecide={STATIC ? undefined : (a) => decide(v.verdict_id, a)} />)}
 
       {decided.length > 0 && (
         <>

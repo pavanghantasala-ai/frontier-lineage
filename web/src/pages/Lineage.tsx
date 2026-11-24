@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api, type Version } from '../api'
+import { api, STATIC, type Version } from '../api'
 import { VerdictBadge } from './VerdictCard'
 
 export default function Lineage() {
@@ -42,7 +42,7 @@ export default function Lineage() {
                 <td><code className="small">{v.diff.map((d) => `${d.path}: ${JSON.stringify(d.from)} → ${JSON.stringify(d.to)}`).join('; ') || '—'}</code></td>
                 {models.map((m) => <td key={m} className="num">{v.scores[m] ? `${(v.scores[m].accuracy * 100).toFixed(0)}%` : '—'}</td>)}
                 <td><span className={`badge ${v.status}`}>{v.status}</span> <VerdictBadge v={v.verdict} /></td>
-                <td>{v.status === 'retired' && v.promoted_at && <button onClick={() => rollback(v.id)}>Roll back to this</button>}</td>
+                <td>{!STATIC && v.status === 'retired' && v.promoted_at && <button onClick={() => rollback(v.id)}>Roll back to this</button>}</td>
               </tr>
             ))}
           </tbody>

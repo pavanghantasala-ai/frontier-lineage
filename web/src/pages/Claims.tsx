@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api, type Card } from '../api'
+import { api, STATIC, type Card } from '../api'
 import { VerdictBadge } from './VerdictCard'
 
 export default function Claims() {
@@ -25,11 +25,11 @@ export default function Claims() {
     <div>
       <h1 style={{ marginTop: 18 }}>Claim cards</h1>
       <p className="sub">Each card is one technique from a lab post: the claim, how to test it, and the threshold it must clear.</p>
-      <div className="card row">
+      {!STATIC && <div className="card row">
         <input type="text" className="grow" placeholder="Paste a lab post URL to test it" value={url} onChange={(e) => setUrl(e.target.value)} />
         <button className="primary" disabled={!url} onClick={ingest}>Add post</button>
         {msg && <div className="small muted" style={{ width: '100%' }}>{msg}</div>}
-      </div>
+      </div>}
       {!cards ? <p className="muted">Loading…</p> : cards.length === 0 ? <p className="muted">No cards yet. Run a cycle.</p> : (
         <div className="card">
           <table>

@@ -51,3 +51,4 @@ input[type=text], input[type=number] { font:inherit; font-size:13px; padding:6px
 label { font-size:13px; }
 .tree-indent { display:inline-block; color:#b0b6bf; font-family: ui-monospace, monospace; }
 @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } .kv { grid-template-columns: 1fr; } .status-pill { margin-left:0; } }
+.intro { font-size:14px; line-height:1.5; }

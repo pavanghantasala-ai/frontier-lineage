@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api, pts, type VerdictView } from '../api'
+import { api, pts, STATIC, type VerdictView } from '../api'
 import { VerdictBadge } from './VerdictCard'
 
 export default function Scoreboard() {
@@ -10,8 +10,8 @@ export default function Scoreboard() {
   const models = Array.from(new Set(rows.flatMap((r) => Object.keys(r.models))))
   return (
     <div>
-      <h1 style={{ marginTop: 18 }}>Scoreboard</h1>
-      <p className="sub">Published verdicts: which frontier lab claims held on our task suite, per model, with the test fixed before running.</p>
+      <h1 style={{ marginTop: 18 }}>{STATIC ? 'Verdicts' : 'Scoreboard'}</h1>
+      <p className="sub">{STATIC ? 'Every claim tested so far:' : 'Published verdicts:'} {' '}which frontier lab claims held on the task suite, per model, with the test fixed before running.</p>
       {rows.length === 0 ? (
         <p className="muted">No published verdicts yet. Publish or promote one from the Frontier Diff.</p>
       ) : (
@@ -36,7 +36,7 @@ export default function Scoreboard() {
                     const x = r.models[m]
                     return <td key={m} className={`num ${x && x.delta > 0 ? 'pos' : x && x.delta < 0 ? 'neg' : ''}`}>{x ? `${pts(x.delta)}` : '—'}</td>
                   })}
-                  <td className="small muted">{r.decided_at?.slice(0, 10)} · {r.decision}</td>
+                  <td className="small muted">{r.decision ? `${r.decided_at?.slice(0, 10)} · ${r.decision}` : 'awaiting review'}</td>
                 </tr>
               ))}
             </tbody>

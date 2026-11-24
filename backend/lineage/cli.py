@@ -16,6 +16,8 @@ def main():
     sub.add_parser("diff", help="print this week's Frontier Diff as Markdown")
     sub.add_parser("verdicts", help="list verdicts")
     sub.add_parser("reset", help="delete the local database")
+    e = sub.add_parser("export", help="write a read-only JSON snapshot for the public site")
+    e.add_argument("out", help="output directory, e.g. ../web/public/data")
     a = p.parse_args()
     if a.cmd == "cycle":
         pipeline.run_cycle(models=a.models.split(",") if a.models else None, runs=a.runs, max_cards=a.max_cards,
@@ -28,6 +30,9 @@ def main():
                               "deltas": {m: round(c["accuracy"]["delta"], 3) for m, c in v["details"]["comparisons"].items()}}))
     elif a.cmd == "reset":
         db.reset()
+    elif a.cmd == "export":
+        from .export import export
+        print(f"wrote {export(a.out)}")
 
 
 if __name__ == "__main__":

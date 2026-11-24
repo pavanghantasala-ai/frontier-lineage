@@ -46,3 +46,18 @@ def test_full_loop_and_human_gate():
         md = client.get("/api/diff/markdown").text
         assert "Frontier Diff" in md
         assert client.get("/api/ledger").json()
+
+
+def test_public_export_is_read_only_snapshot(tmp_path):
+    import json
+    from lineage import db, export
+    _cycle()
+    db.conn().execute("UPDATE items SET text = 'FULL ARTICLE BODY'"); db.conn().commit()
+    out = export.export(tmp_path / "data")
+    status = json.loads((out / "status.json").read_text())
+    assert status["cycle"]["log"] == [] and {m["id"] for m in status["models"]} <= {"mock-strong", "mock-mid", "mock-weak"}
+    card_files = list((out / "cards").glob("*.json"))
+    assert card_files and all("FULL ARTICLE BODY" not in f.read_text() for f in card_files)
+    assert "FULL ARTICLE BODY" not in (out / "items.json").read_text()
+    for name in ("diff", "scoreboard", "versions", "ledger"):
+        assert (out / f"{name}.json").exists()

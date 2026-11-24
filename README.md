@@ -62,3 +62,9 @@ The database lives at `backend/lineage.db` (override with `LINEAGE_DB`).
 cd backend && python -m pytest -q
 cd web && npm run lint && npm run build
 ```
+
+## Public read-only site
+
+`scripts/build_public.sh <out_dir>` exports a sanitized JSON snapshot of the lab (`python -m lineage.cli export`) and builds the web app in static mode (`VITE_STATIC=1`, hash routing, base path `VITE_BASE`, default `/lineage/`). The static build has no run, publish, promote or rollback controls and contains no article bodies or API keys.
+
+`.github/workflows/weekly.yml` runs every Monday: it starts Qwen 2.5 under Ollama, runs a live cycle on GPT-4.1-mini and Qwen, commits the lab state in `backend/state/lineage.db`, then rebuilds `pavanghantasala.com/lineage` by pushing to `pavan-site`. It needs two repo secrets: `OPENAI_API_KEY` and `SITE_TOKEN` (a fine-grained token with Contents read/write on `pavan-site`). Verdicts still need a human review in the private app before anything is promoted.

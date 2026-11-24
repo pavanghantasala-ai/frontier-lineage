@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Route, Routes } from 'react-router-dom'
-import { api, type Status } from './api'
+import { api, STATIC, type Status } from './api'
+import Research from './pages/Research'
 import DiffPage from './pages/DiffPage'
 import Scoreboard from './pages/Scoreboard'
 import Claims from './pages/Claims'
@@ -18,6 +19,7 @@ export default function App() {
     let alive = true
     const load = () => api.status().then((s) => alive && setStatus(s)).catch(() => {})
     load()
+    if (STATIC) return
     const t = setInterval(load, running ? 1500 : 6000)
     return () => {
       alive = false
@@ -39,7 +41,8 @@ export default function App() {
         </div>
         <nav>
           <NavLink to="/" end>Frontier Diff</NavLink>
-          <NavLink to="/scoreboard">Scoreboard</NavLink>
+          <NavLink to="/research">Research</NavLink>
+          <NavLink to="/scoreboard">{STATIC ? 'Verdicts' : 'Scoreboard'}</NavLink>
           <NavLink to="/claims">Claims</NavLink>
           <NavLink to="/lineage">Lineage</NavLink>
           <NavLink to="/ledger">Ledger</NavLink>
@@ -52,6 +55,16 @@ export default function App() {
           </div>
         )}
       </header>
+      {STATIC && (
+        <div className="card intro">
+          <b>Live, read-only view of my lab.</b> Each week it reads what Anthropic, OpenAI, Google DeepMind and other labs
+          publish, turns each technique into a testable claim, applies it to my reference agent, and checks whether it
+          measurably helps on GPT-4.1-mini and the open-weights Qwen 2.5. I review every verdict before a change is
+          promoted.{' '}
+          <a href="https://pavanghantasala.com/lab/posts/frontier-lineage.html">How it works →</a>
+          {status?.exported_at && <span className="muted small"> · Updated {status.exported_at.slice(0, 10)}</span>}
+        </div>
+      )}
       {mockOnly && (
         <div className="banner">
           No model API key with credit is available, so evals run on the deterministic mock model. Verdicts are
@@ -59,7 +72,8 @@ export default function App() {
         </div>
       )}
       <Routes>
-        <Route path="/" element={<><RunPanel status={status} /><DiffPage key={tick} /></>} />
+        <Route path="/" element={<>{!STATIC && <RunPanel status={status} />}<DiffPage key={tick} /></>} />
+        <Route path="/research" element={<Research key={tick} />} />
         <Route path="/scoreboard" element={<Scoreboard key={tick} />} />
         <Route path="/claims" element={<Claims key={tick} />} />
         <Route path="/claims/:id" element={<ClaimDetail />} />

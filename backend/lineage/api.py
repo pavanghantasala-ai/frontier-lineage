@@ -73,7 +73,10 @@ def start_cycle(req: CycleReq):
 
 @app.get("/api/items")
 def items():
-    return db.q("SELECT id, source, lab, title, url, published, fetched_at, status FROM items ORDER BY id DESC")
+    return db.q("""SELECT i.id, i.source, i.lab, i.title, i.url, i.published, i.fetched_at, i.status,
+                   c.id AS card_id, v.verdict
+                   FROM items i LEFT JOIN cards c ON c.item_id = i.id LEFT JOIN verdicts v ON v.card_id = c.id
+                   ORDER BY i.id DESC""")
 
 
 @app.post("/api/ingest")

@@ -50,6 +50,7 @@ export type Status = {
   budget_usd: number
   n_tasks: number
   counts: Record<string, number>
+  exported_at?: string
 }
 
 export type Card = {
@@ -78,7 +79,25 @@ export type Version = {
   decision: string | null
 }
 
+export const STATIC = import.meta.env.VITE_STATIC === '1'
+
+export type Item = {
+  id: number
+  lab: string
+  title: string
+  url: string
+  published: string | null
+  fetched_at: string
+  status: string
+  card_id: number | null
+  verdict: string | null
+}
+
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
+  if (STATIC) {
+    if (init?.method && init.method !== 'GET') throw new Error('This is a read-only view.')
+    path = `${import.meta.env.BASE_URL}data/${path.replace(/^\/api\//, '')}.json`
+  }
   const r = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...init })
   if (!r.ok) {
     let msg = r.statusText
@@ -102,6 +121,7 @@ export const api = {
   card: (id: number) => req<any>(`/api/cards/${id}`),
   versions: () => req<Version[]>('/api/versions'),
   ledger: () => req<any[]>('/api/ledger'),
+  items: () => req<Item[]>('/api/items'),
   startCycle: (body: { models?: string[]; runs: number; max_cards: number; live: boolean; seeds: boolean }) =>
     req('/api/cycle', { method: 'POST', body: JSON.stringify(body) }),
   decide: (verdictId: number, action: string, note = '') =>

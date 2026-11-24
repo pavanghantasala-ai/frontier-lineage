@@ -5,3 +5,5 @@ __pycache__/
 node_modules/
 web/dist/
 .pytest_cache/
+!backend/state/lineage.db
+web/public/data/
